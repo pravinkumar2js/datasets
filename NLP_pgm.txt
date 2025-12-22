@@ -1,0 +1,348 @@
+NATURAL LANGUAGE PROCESSING LAB – SEMESTER VI
+Course Code : UCDSPE61
+Course Title : Natural Language Processing Lab
+--------------------------------------------------
+
+EXPERIMENT – 1
+Program to perform word and sentence tokenization
+--------------------------------------------------
+
+import nltk
+nltk.download('punkt_tab')
+
+from nltk.tokenize import sent_tokenize, word_tokenize
+
+text = "Hello world! This is a tokenization example."
+
+sentences = sent_tokenize(text)
+print("Sentence Tokenization:")
+print(sentences)
+
+words = word_tokenize(text)
+print("\nWord Tokenization:")
+print(words)
+
+
+--------------------------------------------------
+EXPERIMENT – 2
+Program to eliminate stop words using NLTK
+--------------------------------------------------
+
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+nltk.download("punkt")
+nltk.download("stopwords")
+
+text = "This is a simple example showing how to remove stop words using NLTK."
+
+words = word_tokenize(text)
+stop_words = set(stopwords.words("english"))
+
+filtered_words = [w for w in words if w.lower() not in stop_words]
+
+print("Original Words:")
+print(words)
+
+print("\nFiltered Words:")
+print(filtered_words)
+
+
+--------------------------------------------------
+EXPERIMENT – 3
+Program to perform Parts of Speech tagging
+--------------------------------------------------
+
+import nltk
+nltk.download("punkt")
+nltk.download("averaged_perceptron_tagger_eng")
+
+sentence = "nltk is a natural language toolkit"
+
+tokens = nltk.word_tokenize(sentence)
+pos_tags = nltk.pos_tag(tokens)
+
+print("Tokens:", tokens)
+print("POS Tags:")
+for word, tag in pos_tags:
+    print(word, "->", tag)
+
+
+--------------------------------------------------
+EXPERIMENT – 4
+Program to perform lemmatization and chunking
+--------------------------------------------------
+
+import nltk
+from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import word_tokenize
+from nltk.chunk import RegexpParser
+from nltk.corpus import wordnet
+
+nltk.download("wordnet")
+nltk.download("omw-1.4")
+nltk.download("averaged_perceptron_tagger_eng")
+
+def get_wordnet_pos(tag):
+    if tag.startswith("J"):
+        return wordnet.ADJ
+    elif tag.startswith("V"):
+        return wordnet.VERB
+    elif tag.startswith("N"):
+        return wordnet.NOUN
+    elif tag.startswith("R"):
+        return wordnet.ADV
+    else:
+        return wordnet.NOUN
+
+text = "The quick brown fox jumps over the lazy dog"
+
+tokens = word_tokenize(text)
+pos_tags = nltk.pos_tag(tokens)
+
+lemmatizer = WordNetLemmatizer()
+lemmatized = [lemmatizer.lemmatize(word, get_wordnet_pos(tag)) for word, tag in pos_tags]
+
+print("Lemmatized Words:")
+print(list(zip(tokens, lemmatized)))
+
+grammar = r"NP: {<DT>?<JJ>*<NN.*>}"
+chunk_parser = RegexpParser(grammar)
+chunk_tree = chunk_parser.parse(pos_tags)
+
+print("\nChunking Result:")
+print(chunk_tree)
+
+
+--------------------------------------------------
+EXPERIMENT – 5
+Program to perform Named Entity Recognition
+--------------------------------------------------
+
+import nltk
+from nltk import word_tokenize, pos_tag, ne_chunk
+
+nltk.download("punkt")
+nltk.download("maxent_ne_chunker_tab")
+nltk.download("words")
+
+text = "APJ Abdul Kalam visited India"
+
+tokens = word_tokenize(text)
+pos_tags = pos_tag(tokens)
+tree = ne_chunk(pos_tags)
+
+print(tree)
+
+
+--------------------------------------------------
+EXPERIMENT – 6
+Program to find TF and IDF
+--------------------------------------------------
+
+import math
+from nltk.tokenize import word_tokenize
+
+docs = [
+    "the sky is blue",
+    "the sun is bright",
+    "the sun in the sky is bright"
+]
+
+tokenized_docs = [word_tokenize(doc.lower()) for doc in docs]
+
+idf = {}
+all_words = set(word for doc in tokenized_docs for word in doc)
+
+for word in all_words:
+    containing = sum(word in doc for doc in tokenized_docs)
+    idf[word] = math.log(len(tokenized_docs) / containing)
+
+tfidf = []
+
+for doc in tokenized_docs:
+    tf_idf_doc = {}
+    for word in doc:
+        tf = doc.count(word) / len(doc)
+        tf_idf_doc[word] = tf * idf[word]
+    tfidf.append(tf_idf_doc)
+
+for i, doc in enumerate(tfidf):
+    print("Document", i + 1, "TF-IDF:", doc)
+
+
+--------------------------------------------------
+EXPERIMENT – 7
+Program to find unigrams, bigrams and trigrams
+--------------------------------------------------
+
+import nltk
+from nltk.util import ngrams
+from nltk.tokenize import word_tokenize
+
+corpus = [
+    "The cat sat on the mat",
+    "The dog chased the cat"
+]
+
+tokenized_docs = [word_tokenize(doc.lower()) for doc in corpus]
+
+unigrams = set()
+bigrams = set()
+trigrams = set()
+
+for tokens in tokenized_docs:
+    unigrams.update(tokens)
+    bigrams.update(ngrams(tokens, 2))
+    trigrams.update(ngrams(tokens, 3))
+
+print("Unigrams:", unigrams)
+print("Bigrams:", bigrams)
+print("Trigrams:", trigrams)
+
+
+--------------------------------------------------
+EXPERIMENT – 8
+Program to generate text using Markov Chain Model
+--------------------------------------------------
+
+import random
+import nltk
+from nltk.tokenize import word_tokenize
+
+nltk.download("punkt")
+
+corpus = "the cat sat on the mat the cat likes the mat"
+tokens = word_tokenize(corpus.lower())
+
+markov_chain = {}
+
+for i in range(len(tokens) - 1):
+    word = tokens[i]
+    next_word = tokens[i + 1]
+    if word not in markov_chain:
+        markov_chain[word] = []
+    markov_chain[word].append(next_word)
+
+def generate_text(chain, start_word, length=15):
+    word = start_word
+    output = [word]
+    for _ in range(length - 1):
+        next_words = chain.get(word)
+        if not next_words:
+            break
+        word = random.choice(next_words)
+        output.append(word)
+    return " ".join(output)
+
+print(generate_text(markov_chain, "the"))
+
+
+--------------------------------------------------
+EXPERIMENT – 9
+Program to find synonyms and antonyms using WordNet
+--------------------------------------------------
+
+import nltk
+from nltk.corpus import wordnet
+
+nltk.download("wordnet")
+nltk.download("omw-1.4")
+
+def get_synonyms_antonyms(word):
+    synonyms = set()
+    antonyms = set()
+
+    for syn in wordnet.synsets(word):
+        for lemma in syn.lemmas():
+            synonyms.add(lemma.name())
+            if lemma.antonyms():
+                for ant in lemma.antonyms():
+                    antonyms.add(ant.name())
+
+    return synonyms, antonyms
+
+word = "good"
+syns, ants = get_synonyms_antonyms(word)
+
+print("Synonyms:", syns)
+print("Antonyms:", ants)
+
+
+--------------------------------------------------
+EXPERIMENT – 10
+Program to perform Sentiment Analysis
+--------------------------------------------------
+
+import nltk
+from nltk.sentiment import SentimentIntensityAnalyzer
+
+nltk.download("vader_lexicon")
+
+sia = SentimentIntensityAnalyzer()
+
+text = "I love this product"
+
+score = sia.polarity_scores(text)
+print(score)
+
+
+--------------------------------------------------
+EXPERIMENT – 11
+Program to develop Spam Filter
+--------------------------------------------------
+
+import nltk
+from nltk.corpus import stopwords
+from nltk.classify import NaiveBayesClassifier
+from nltk.tokenize import word_tokenize
+
+nltk.download("punkt")
+nltk.download("stopwords")
+
+data = [
+    ("Free prize win now", "spam"),
+    ("Let's meet tomorrow", "ham")
+]
+
+stop_words = set(stopwords.words("english"))
+
+def extract_features(text):
+    words = word_tokenize(text.lower())
+    return {w: True for w in words if w.isalpha() and w not in stop_words}
+
+featuresets = [(extract_features(text), label) for text, label in data]
+classifier = NaiveBayesClassifier.train(featuresets)
+
+print(classifier.classify(extract_features("Free money now")))
+
+
+--------------------------------------------------
+EXPERIMENT – 12
+Program to detect Fake News
+--------------------------------------------------
+
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.classify import NaiveBayesClassifier
+
+nltk.download("punkt")
+nltk.download("stopwords")
+
+data = [
+    ("Government passes new law", "real"),
+    ("Click here to get rich", "fake")
+]
+
+stop_words = set(stopwords.words("english"))
+
+def extract_features(text):
+    words = word_tokenize(text.lower())
+    return {w: True for w in words if w.isalpha() and w not in stop_words}
+
+featuresets = [(extract_features(text), label) for text, label in data]
+classifier = NaiveBayesClassifier.train(featuresets)
+
+print(classifier.classify(extract_features("Get rich fast")))

@@ -1,0 +1,64 @@
+EX. NO. 4 – NORTH WIND DATABASE
+
+-- Q1
+SELECT orders.orderid,SUM(unitprice*quantity) FROM orders JOIN orderdetails ON orders.orderid=orderdetails.orderid GROUP BY orders.orderid;
+
+-- Q2
+SELECT productname,unitprice FROM products ORDER BY unitprice DESC LIMIT 10;
+
+-- Q3
+SELECT categoryname,productname FROM categories c JOIN products p ON c.categoryid=p.categoryid;
+
+-- Q4
+SELECT city,companyname,contactname,'Customer' FROM customers WHERE city IS NOT NULL UNION SELECT city,companyname,contactname,'Supplier' FROM suppliers ORDER BY city;
+
+-- Q5
+SELECT (SELECT COUNT(customerid) FROM customers),(SELECT COUNT(supplierid) FROM suppliers);
+
+-- Q6
+SELECT e1.lastname,IF(e1.reportsto IS NULL,'CEO',e2.lastname) FROM employees e1 LEFT JOIN employees e2 ON e1.reportsto=e2.employeeid;
+
+-- Q7
+SELECT productname,companyname FROM products JOIN suppliers ON products.supplierid=suppliers.supplierid ORDER BY productname;
+
+-- Q8
+SELECT categoryname,productname,companyname FROM categories JOIN products ON categories.categoryid=products.categoryid JOIN suppliers ON products.supplierid=suppliers.supplierid ORDER BY categoryname;
+
+-- Q9
+SELECT DISTINCT companyname,orderdate FROM customers JOIN orders ON customers.customerid=orders.customerid WHERE orderdate BETWEEN '1998-05-04' AND '1998-05-06';
+
+-- Q10
+SELECT productname,CONCAT(ROUND(unitsinstock/(SELECT SUM(unitsinstock) FROM products)*100,2),'%') FROM products;
+
+-- Q11
+SELECT companyname,freight FROM shippers JOIN orders ON shippers.shipperid=orders.shipvia WHERE freight=(SELECT MAX(freight) FROM orders);
+
+-- Q12
+SELECT customers.customerid,companyname,orderdate FROM customers JOIN orders ON customers.customerid=orders.customerid WHERE orderdate>'1998-05-01' ORDER BY customers.customerid;
+
+-- Q13
+SELECT employeeid,firstname,lastname,city,country FROM employees WHERE ROW(city,country) IN (SELECT city,country FROM customers);
+
+-- Q14
+SELECT DISTINCT c.customerid,companyname,shipcountry FROM customers c JOIN orders o ON c.customerid=o.customerid WHERE shipcountry='UK';
+
+-- Q15
+SELECT orders.customerid,companyname,AVG(freight) FROM orders JOIN customers ON orders.customerid=customers.customerid GROUP BY orders.customerid;
+
+-- Q16
+SELECT SUM(unitsinstock) FROM products WHERE discontinued=1;
+
+-- Q17
+SELECT p.categoryid,categoryname,GROUP_CONCAT(DISTINCT supplierid ORDER BY supplierid) FROM products p JOIN categories c ON p.categoryid=c.categoryid GROUP BY p.categoryid;
+
+-- Q18
+SELECT c.categoryid,categoryname,SUM(unitsinstock) FROM products p JOIN categories c ON p.categoryid=c.categoryid GROUP BY c.categoryid;
+
+-- Q19
+SELECT o.employeeid,CONCAT(firstname,' ',lastname),COUNT(o.orderid) FROM orders o JOIN employees e ON o.employeeid=e.employeeid GROUP BY o.employeeid HAVING COUNT(o.orderid)>100 ORDER BY COUNT(o.orderid) DESC;
+
+-- Q20
+SELECT YEAR(orderdate),o.employeeid,CONCAT(firstname,' ',lastname),COUNT(o.orderid) FROM orders o JOIN employees e ON o.employeeid=e.employeeid GROUP BY YEAR(orderdate),o.employeeid HAVING COUNT(o.orderid)>30 ORDER BY YEAR(orderdate),COUNT(o.orderid) DESC;
+
+-- Q21
+SELECT city,COUNT(*),'Customer' FROM customers WHERE city IS NOT NULL GROUP BY city UNION SELECT city,COUNT(*),'Supplier' FROM suppliers WHERE city IS NOT NULL GROUP BY city ORDER BY city;

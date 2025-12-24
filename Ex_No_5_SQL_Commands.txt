@@ -1,0 +1,61 @@
+EX. NO. 5 – SAILOR–BOAT DATABASE
+
+-- Q1
+SELECT sname,rating FROM sailors WHERE rating IN (SELECT MAX(rating) FROM sailors);
+
+-- Q2
+SELECT sname,age FROM sailors WHERE age=(SELECT MAX(age) FROM sailors);
+
+-- Q3
+SELECT rating,AVG(age) FROM sailors GROUP BY rating HAVING COUNT(*)>1;
+
+-- Q4
+SELECT rating,sname,age FROM sailors WHERE ROW(rating,age) IN (SELECT rating,MIN(age) FROM sailors GROUP BY rating) ORDER BY rating;
+
+-- Q5
+SELECT sname,rating FROM sailors WHERE rating>(SELECT rating FROM sailors WHERE sname='Andy');
+
+-- Q6
+SELECT sailors.sid,sname,bid FROM sailors JOIN reserves ON sailors.sid=reserves.sid AND bid=103;
+
+-- Q7
+SELECT DISTINCT sname,color FROM sailors s JOIN reserves r ON s.sid=r.sid JOIN boats b ON r.bid=b.bid WHERE color='red';
+
+-- Q8
+SELECT DISTINCT s.sid,sname FROM sailors s JOIN reserves r ON s.sid=r.sid;
+
+-- Q9
+SELECT s.sid,sname FROM sailors s LEFT JOIN reserves r ON s.sid=r.sid WHERE r.sid IS NULL;
+
+-- Q10
+SELECT sname,age,CASE WHEN age>=50 THEN 'Senior' WHEN age>=40 THEN 'Middle' WHEN age>=25 THEN 'Junior' ELSE 'Beginner' END FROM sailors;
+
+-- Q11
+SELECT DISTINCT sname,color FROM sailors JOIN reserves ON sailors.sid=reserves.sid JOIN boats ON reserves.bid=boats.bid WHERE sname='Lubber';
+
+-- Q12
+SELECT DISTINCT s.sid,sname,r1.day FROM sailors s,reserves r1,reserves r2 WHERE s.sid=r1.sid AND s.sid=r2.sid AND r1.day=r2.day AND r1.bid<>r2.bid;
+
+-- Q13
+SELECT DISTINCT sname FROM sailors s JOIN reserves r ON s.sid=r.sid JOIN boats b ON r.bid=b.bid WHERE color IN ('red','green');
+
+-- Q14
+SELECT DISTINCT s.sname FROM sailors s,reserves r,boats b WHERE s.sid=r.sid AND r.bid=b.bid AND b.color='red' AND s.sname IN (SELECT DISTINCT s.sname FROM sailors s,reserves r,boats b WHERE s.sid=r.sid AND r.bid=b.bid AND b.color='green');
+
+-- Q15
+SELECT DISTINCT s.sname FROM sailors s,reserves r,boats b WHERE s.sid=r.sid AND r.bid=b.bid AND b.color='red' AND s.sname NOT IN (SELECT DISTINCT s.sname FROM sailors s,reserves r,boats b WHERE s.sid=r.sid AND r.bid=b.bid AND b.color='blue');
+
+-- Q16
+SELECT r.bid,COUNT(*) FROM boats b JOIN reserves r ON b.bid=r.bid WHERE b.color='red' GROUP BY r.bid;
+
+-- Q17
+SELECT bname,COUNT(*) FROM reserves r JOIN boats b ON r.bid=b.bid GROUP BY bname;
+
+-- Q18
+SELECT sname,bname,day FROM reserves r JOIN boats b ON r.bid=b.bid JOIN sailors s ON r.sid=s.sid ORDER BY r.sid;
+
+-- Q19
+SELECT sname,age FROM sailors WHERE age>(SELECT MAX(age) FROM sailors WHERE rating=10);
+
+-- Q20
+SELECT sname FROM sailors WHERE rating=10 UNION SELECT sname FROM sailors s JOIN reserves r ON s.sid=r.sid AND bid=104;

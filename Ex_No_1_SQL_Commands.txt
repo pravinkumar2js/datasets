@@ -1,151 +1,211 @@
+EX. NO. 1 – WORLD DATABASE
 
--- Ex. No. 1 : WORLD DATABASE (SQL Commands)
-
+-- Q1
 SELECT name,population FROM country WHERE name='Germany';
 
-SELECT name, population FROM country WHERE name IN ('Ireland','Iceland','Denmark');
+-- Q2
+SELECT name,population FROM country WHERE name IN ('Ireland','Iceland','Denmark');
 
-SELECT name, surfacearea FROM country WHERE surfacearea BETWEEN 250000 AND 300000;
+-- Q3
+SELECT name,surfacearea FROM country WHERE surfacearea BETWEEN 250000 AND 300000;
 
+-- Q4
 SELECT SUM(population) FROM country;
 
+-- Q5
 SELECT DISTINCT continent FROM country;
 
-SELECT COUNT(name) FROM country WHERE surfacearea > 1000000;
+-- Q6
+SELECT COUNT(name) FROM country WHERE surfacearea>1000000;
 
+-- Q7
 SELECT SUM(population) FROM country WHERE name IN ('France','Germany','Spain');
 
+-- Q8
 SELECT name FROM country WHERE name LIKE 'z%a';
 
+-- Q9
 SELECT name FROM country WHERE name LIKE '%United%';
 
+-- Q10
 SELECT name FROM country WHERE name LIKE '____';
 
-SELECT name FROM country WHERE population >= 200000000;
+-- Q11
+SELECT name FROM country WHERE population>=200000000;
 
-SELECT name, population FROM country WHERE continent='Asia' ORDER BY population LIMIT 10;
+-- Q12
+SELECT name,population FROM country WHERE continent='Asia' ORDER BY population LIMIT 10;
 
-SELECT name, population/surfacearea FROM country WHERE population >= 200000000;
+-- Q13
+SELECT name,population/surfacearea FROM country WHERE population>=200000000;
 
-SELECT name, population/1000000 AS 'Population in Million' FROM country WHERE continent='South America';
+-- Q14
+SELECT name,population/1000000 AS 'Population in Million' FROM country WHERE continent='South America';
 
-SELECT name,population,surfacearea FROM country 
-WHERE surfacearea > 3000000 OR population > 250000000;
+-- Q15
+SELECT name,population,surfacearea FROM country WHERE surfacearea>3000000 OR population>250000000;
 
-SELECT name,population,surfacearea FROM country 
-WHERE (surfacearea > 3000000 OR population > 250000000)
-AND NOT (surfacearea > 3000000 AND population > 250000000);
+-- Q16
+SELECT name,population,surfacearea FROM country WHERE (surfacearea>3000000 OR population>250000000) AND NOT (surfacearea>3000000 AND population>250000000);
 
-SELECT name,population FROM country WHERE population > 100000000 ORDER BY population DESC;
+-- Q17
+SELECT name,population FROM country WHERE population>100000000 ORDER BY population DESC;
 
+-- Q18
 SELECT name,population FROM city WHERE countrycode='IND' ORDER BY population DESC;
 
+-- Q19
 SELECT name,indepyear FROM country WHERE indepyear IS NULL;
 
-SELECT *,
-CASE 
-WHEN percentage <= 10 THEN 'Low'
-WHEN percentage BETWEEN 11 AND 50 THEN 'Medium'
-ELSE 'High'
-END
-FROM countrylanguage;
+-- Q20
+SELECT *,CASE WHEN percentage<=10 THEN 'Low' WHEN percentage BETWEEN 11 AND 50 THEN 'Medium' ELSE 'High' END FROM countrylanguage;
 
+-- Q21
 SELECT COUNT(DISTINCT language) FROM countrylanguage;
 
-SELECT code,name,indepyear FROM country 
-WHERE indepyear IS NOT NULL ORDER BY indepyear DESC LIMIT 1;
+-- Q22
+SELECT code,name,indepyear FROM country WHERE indepyear IS NOT NULL ORDER BY indepyear DESC LIMIT 1;
 
-SELECT DISTINCT language FROM countrylanguage 
-WHERE isofficial='T' ORDER BY language DESC;
+-- Q23
+SELECT DISTINCT language FROM countrylanguage WHERE isofficial='T' ORDER BY language DESC;
 
+-- Q24
 SELECT name FROM country WHERE name LIKE '%Republic%';
 
-SELECT name FROM country WHERE continent <> 'Africa';
+-- Q25
+SELECT name FROM country WHERE continent!='Africa';
 
+-- Q26
 SELECT name,population FROM country ORDER BY population DESC LIMIT 3;
 
-SELECT continent,name,population FROM country 
-WHERE continent='Europe' ORDER BY population DESC LIMIT 1;
+-- Q27
+SELECT continent,name,population FROM country WHERE continent='Europe' ORDER BY population DESC LIMIT 1;
 
+-- Q28
 SELECT name,surfacearea FROM country ORDER BY surfacearea LIMIT 1;
 
-SELECT continent,name,surfacearea FROM country 
-WHERE continent='Asia' ORDER BY surfacearea DESC LIMIT 1;
+-- Q29
+SELECT continent,name,surfacearea FROM country WHERE continent='Asia' ORDER BY surfacearea DESC LIMIT 1;
 
-SELECT continent,name,population/surfacearea FROM country 
-WHERE continent='Asia' ORDER BY 3 DESC;
+-- Q30
+SELECT continent,name,population/surfacearea FROM country WHERE continent='Asia' ORDER BY 3 DESC;
 
+-- Q31
 SELECT continent,name,gnp/population FROM country ORDER BY gnp/population DESC;
 
+-- Q32
 SELECT name FROM country WHERE LEFT(name,1)=RIGHT(name,1);
 
-SELECT GROUP_CONCAT(name ORDER BY name SEPARATOR '-') 
-FROM city WHERE countrycode='IND' AND district='Tamil Nadu';
+-- Q33
+SELECT GROUP_CONCAT(name ORDER BY name SEPARATOR '-') FROM city WHERE countrycode='IND' AND district='Tamil Nadu';
 
+-- Q34
 SELECT name,lifeexpectancy FROM country ORDER BY lifeexpectancy DESC LIMIT 1;
 
-SELECT name,population FROM city 
-WHERE population=(SELECT MAX(population) FROM city);
+-- Q35
+SELECT name,population FROM city WHERE population=(SELECT MAX(population) FROM city);
 
-SELECT name,population FROM country 
-WHERE population >= ALL (SELECT population FROM country);
+-- Q36
+SELECT name,population FROM country WHERE population>=ALL(SELECT population FROM country);
 
-SELECT name,population FROM country 
-WHERE population > (SELECT population FROM country WHERE name='Romania');
+-- Q37
+SELECT name,population FROM country WHERE population>(SELECT population FROM country WHERE name='Romania');
 
-SELECT name,continent FROM country 
-WHERE continent=(SELECT continent FROM country WHERE name='Brazil');
+-- Q38
+SELECT name,continent FROM country WHERE continent=(SELECT continent FROM country WHERE name='Brazil');
 
-SELECT name,continent FROM country 
-WHERE continent IN (
-SELECT continent FROM country WHERE name IN ('Brazil','Mexico')
-);
+-- Q39
+SELECT name,continent FROM country WHERE continent IN (SELECT continent FROM country WHERE name IN ('Brazil','Mexico'));
 
-SELECT name,population/(SELECT population FROM country WHERE name='United Kingdom') 
-FROM country WHERE name='China';
+-- Q40
+SELECT name,population/(SELECT population FROM country WHERE name='United Kingdom') FROM country WHERE name='China';
 
-SELECT name,population FROM country 
-WHERE population > ALL (SELECT population FROM country WHERE continent='Europe');
+-- Q41
+SELECT name,population FROM country WHERE population>ALL(SELECT population FROM country WHERE continent='Europe');
 
-SELECT name,
-CONCAT(ROUND((population/(SELECT population FROM country WHERE name='Germany')*100),0),'%')
-FROM country WHERE continent='Europe';
+-- Q42
+SELECT name,CONCAT(ROUND((population/(SELECT population FROM country WHERE name='Germany')*100),0),'%') FROM country WHERE continent='Europe';
 
-SELECT name,population FROM country 
-WHERE population > (SELECT population FROM country WHERE name='Canada')
-AND population < (SELECT population FROM country WHERE name='Poland');
+-- Q43
+SELECT name,population FROM country WHERE population>(SELECT population FROM country WHERE name='Canada') AND population<(SELECT population FROM country WHERE name='Poland');
 
-SELECT language FROM countrylanguage 
-WHERE countrycode=(SELECT code FROM country WHERE name='Finland');
+-- Q44
+SELECT language FROM countrylanguage WHERE countrycode=(SELECT code FROM country WHERE name='Finland');
 
-SELECT continent,name,population FROM country 
-WHERE continent='South America' ORDER BY population LIMIT 1;
+-- Q45
+SELECT continent,name,population FROM country WHERE continent='South America' ORDER BY population LIMIT 1;
 
-SELECT continent,name,surfacearea FROM country x
-WHERE surfacearea >= ALL (
-SELECT surfacearea FROM country y 
-WHERE y.continent=x.continent AND surfacearea > 0
-);
+-- Q46
+SELECT continent,name,surfacearea FROM country x WHERE surfacearea>=ALL(SELECT surfacearea FROM country y WHERE x.continent=y.continent AND surfacearea>0);
 
-SELECT continent,name,population FROM country t1
-WHERE population=(
-SELECT MAX(population) FROM country t2 
-WHERE t1.continent=t2.continent
-);
+-- Q47
+SELECT continent,name,population FROM country t1 WHERE population=(SELECT MAX(population) FROM country t2 WHERE t1.continent=t2.continent);
 
-SELECT CONCAT('The country code for Finland is:',
-(SELECT code FROM country WHERE name='Finland'));
+-- Q48
+SELECT CONCAT('The country code of Finland is:',(SELECT code FROM country WHERE name='Finland'));
 
-SELECT (SELECT SUM(population) FROM city) /
-(SELECT SUM(population) FROM country) AS ratio;
+-- Q49
+SELECT (SELECT SUM(population) FROM city)/(SELECT SUM(population) FROM country) AS ratio;
 
-SELECT DISTINCT continent FROM country 
-WHERE code IN (
-SELECT countrycode FROM countrylanguage 
-WHERE language='English' AND percentage > 50
-);
+-- Q50
+SELECT DISTINCT continent FROM country WHERE code IN (SELECT countrycode FROM countrylanguage WHERE language='English' AND percentage>50);
 
-SELECT name FROM country WHERE continent='Europe'
-AND code IN (
-SELECT countrycode FROM countrylanguage WHERE language='Spanish'
-);
+-- Q51
+SELECT name FROM country WHERE continent='Europe' AND code IN (SELECT countrycode FROM countrylanguage WHERE language='Spanish');
+
+-- Q52
+SELECT countrycode,language FROM countrylanguage WHERE countrycode=(SELECT code FROM country WHERE name='Thailand');
+
+-- Q53
+SELECT name FROM country WHERE code NOT IN (SELECT countrycode FROM countrylanguage);
+
+-- Q54
+SELECT name FROM country WHERE code IN (SELECT countrycode FROM countrylanguage WHERE language='English' AND isofficial='T');
+
+-- Q55
+SELECT name,population FROM city WHERE countrycode=(SELECT code FROM country WHERE name='Thailand') ORDER BY population DESC;
+
+-- Q56
+SELECT continent,COUNT(name) FROM country GROUP BY continent;
+
+-- Q57
+SELECT continent,COUNT(name) FROM country WHERE population>200000000 GROUP BY continent;
+
+-- Q58
+SELECT continent,COUNT(name) FROM country WHERE continent='Europe' GROUP BY continent;
+
+-- Q59
+SELECT continent,SUM(population) FROM country GROUP BY continent ORDER BY 2;
+
+-- Q60
+SELECT continent,SUM(population) FROM country GROUP BY continent HAVING SUM(population)>500000000;
+
+-- Q61
+SELECT continent,COUNT(name),AVG(population) FROM country GROUP BY continent;
+
+-- Q62
+SELECT countrycode,COUNT(name) FROM city WHERE countrycode=(SELECT code FROM country WHERE name='China') GROUP BY countrycode;
+
+-- Q63
+SELECT country.name,city.name FROM country,city WHERE country.capital=city.id;
+
+-- Q64
+SELECT l.language,c.name FROM country c,countrylanguage l WHERE c.code=l.countrycode AND language='Thai';
+
+-- Q65
+SELECT l.language,c.name FROM country c,countrylanguage l WHERE c.code=l.countrycode AND language='Chinese' AND isofficial='T';
+
+-- Q66
+SELECT language,COUNT(*) FROM countrylanguage WHERE language='English' AND isofficial='T' GROUP BY language;
+
+-- Q67
+SELECT countrycode,COUNT(language) FROM countrylanguage WHERE isofficial='T' GROUP BY countrycode;
+
+-- Q68
+SELECT countrycode,COUNT(language) FROM countrylanguage WHERE isofficial='T' GROUP BY countrycode HAVING COUNT(language)>1;
+
+-- Q69
+SELECT c.name,l.language FROM country c,countrylanguage l WHERE c.code=l.countrycode AND language='Dari' AND isofficial='T';
+
+-- Q70
+SELECT c.name,l.language FROM country c,countrylanguage l WHERE c.code=l.countrycode AND language='Swedish';
